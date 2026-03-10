@@ -1,0 +1,124 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  merge_group:
+  release:
+    types:
+      - published
+      - prereleased
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test on ${{ matrix.os }} with Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          # - macos-latest
+        python-version:
+          - "3.10"
+          - "3.13"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Install uv and set Python version
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: uv sync --locked --all-extras --dev
+
+      - name: Run pytest and report coverage
+        shell: bash
+        run: |
+          echo "### 🧪 Coverage on ${{ matrix.os }} / Python ${{ matrix.python-version }}" >> $GITHUB_STEP_SUMMARY
+
+          set +e
+          uv run pytest --cov=src --cov-report=term
+          TEST_EXIT_CODE=$?
+          set -e
+
+          if [ -f ".coverage" ]; then
+            uv run coverage report --format=markdown >> $GITHUB_STEP_SUMMARY || echo "⚠️ Coverage report failed (possibly due to earlier test errors or missing data)." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ No coverage data found; coverage report was not generated." >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ $TEST_EXIT_CODE -ne 0 ]; then
+            echo "❌ **Tests failed. Check the logs for details.**" >> $GITHUB_STEP_SUMMARY
+            exit $TEST_EXIT_CODE
+          else
+            echo "✅ **All tests passed successfully.**" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  build:
+    needs: test
+    name: Build on ${{ matrix.os }} with Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+        python-version:
+          - "3.10"
+          - "3.11"
+          - "3.12"
+          - "3.13"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Install uv and set Python version
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          python-version: ${{ matrix.python-version }}
+
+      - name: Build package
+        shell: bash
+        run: |
+          echo "### 📦 Build on ${{ matrix.os }} / Python ${{ matrix.python-version }}" >> $GITHUB_STEP_SUMMARY
+
+          set +e
+          uv build
+          BUILD_EXIT_CODE=$?
+          set -e
+
+          if [ $BUILD_EXIT_CODE -ne 0 ]; then
+            echo "❌ **Build failed. Check the logs for details.**" >> $GITHUB_STEP_SUMMARY
+            exit $BUILD_EXIT_CODE
+          else
+            echo "✅ **Build completed successfully.**" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Verify build artifacts
+        shell: bash
+        run: |
+          if ls dist/*.whl 1> /dev/null 2>&1 && ls dist/*.tar.gz 1> /dev/null 2>&1; then
+            echo "✅ **Artifacts (sdist and wheel) verified.**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Artifacts missing.**" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
