@@ -16,7 +16,7 @@
 
 ---
 
-[Quick Start](#-quick-start) • [Features](#-features) • [Configuration](#-configuration) • [Contributing](#-contributing)
+[Overview](#-overview) • [Features](#-features) • [Start From This Repository](#start-from-this-repository)
 
 </div>
 
@@ -82,7 +82,7 @@ git commit -m "Initial commit"
 
 ## Updating dev dependencies
 
-If you want to remove items from the `dev-dependencies` section in `pyproject.toml`, delete the corresponding entries under the appropriate table (for example `[tool.uv.dev-dependencies]`). After removing unwanted entries, re-run the following to add or update the minimal development dependencies:
+If you want to remove items from the `dev-dependencies` section in `pyproject.toml`, delete the corresponding entries under the `[dependency-groups]` table (for example `[dependency-groups.dev]`). After removing unwanted entries, re-run the following to add or update the minimal development dependencies:
 
 ```bash
 uv add --dev zensical pre-commit ruff ty pytest pytest-cov pytest-mock

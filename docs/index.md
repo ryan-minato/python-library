@@ -30,7 +30,7 @@ assert hello() == "Hello from python-library!"
 ### Documentation and automation
 
 - Zensical documentation setup via `zensical.toml`
-- GitHub Actions docs deployment workflow
+- GitHub Actions–ready structure (add your own docs deployment workflow)
 - A docs structure you can expand instead of rebuilding later
 
 ## Choose your starting path
