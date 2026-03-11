@@ -28,7 +28,7 @@ repos:
   - repo: local
     hooks:
       - id: check-ty
-        name: Check ty
+        name: check ty
         entry: uvx ty check
         language: system
         types_or: [ python, pyi ]
@@ -37,3 +37,4 @@ repos:
     rev: v8.24.2
     hooks:
       - id: gitleaks
+        name: secret scanning with gitleaks
