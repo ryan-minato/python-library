@@ -348,7 +348,7 @@ wheels = [
 ]
 
 [[package]]
-name = "python-library"
+name = "python-library-20260310"
 version = "0.1.0"
 source = { editable = "." }
 
