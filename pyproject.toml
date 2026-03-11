@@ -1,6 +1,6 @@
 [project]
 # NOTE: Change this to your library name
-name = "python-library"
+name = "python-library-20260310"
 version = "0.1.0"
 # NOTE: Change this to your library description
 description = "A minimalist and modern boilerplate for rapid Python library development."

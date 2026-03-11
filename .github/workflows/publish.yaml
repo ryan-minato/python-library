@@ -1,0 +1,228 @@
+name: Publish Python Package
+
+on:
+  release:
+    types:
+      - published
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build Distributions
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      attestations: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Build sdist and wheel
+        run: |
+          uv build
+          echo "### 📦 Build Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "Successfully built the following packages:" >> $GITHUB_STEP_SUMMARY
+          echo '```bash' >> $GITHUB_STEP_SUMMARY
+          ls -lh dist/ >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: 'dist/*'
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-files
+          path: dist/
+          if-no-files-found: error
+
+  test:
+    name: Smoke Test Distributions
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+          path: dist/
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Test Wheel (.whl)
+        id: test-wheel
+        run: |
+          uv run --isolated --no-project --with pytest --with dist/*.whl pytest tests/ 2>&1 | tee pytest_whl.log
+          echo "✅ **Wheel (.whl)** smoke test passed!" >> $GITHUB_STEP_SUMMARY
+
+      - name: Test Source Distribution (.tar.gz)
+        id: test-sdist
+        run: |
+          uv run --isolated --no-project --with pytest --with dist/*.tar.gz pytest tests/ 2>&1 | tee pytest_sdist.log
+          echo "✅ **Source Distribution (.tar.gz)** smoke test passed!" >> $GITHUB_STEP_SUMMARY
+
+      - name: Report Test Results
+        if: always()
+        run: |
+          echo "## 🧪 Smoke Test Status Report" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ steps.test-wheel.outcome }}" == "success" ]; then
+            echo "✅ **Wheel (.whl)**: Test completed successfully" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ steps.test-wheel.outcome }}" == "failure" ]; then
+            echo "❌ **Wheel (.whl)**: Test failed" >> $GITHUB_STEP_SUMMARY
+            echo "<details><summary>Click to expand error logs</summary>" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`text" >> $GITHUB_STEP_SUMMARY
+            cat pytest_whl.log >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            echo "</details><br>" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ **Wheel (.whl)**: Skipped due to previous step failure" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "${{ steps.test-sdist.outcome }}" == "success" ]; then
+            echo "✅ **Source Distribution (.tar.gz)**: Test completed successfully" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ steps.test-sdist.outcome }}" == "failure" ]; then
+            echo "❌ **Source Distribution (.tar.gz)**: Test failed" >> $GITHUB_STEP_SUMMARY
+            echo "<details><summary>Click to expand error logs</summary>" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`text" >> $GITHUB_STEP_SUMMARY
+            cat pytest_sdist.log >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            echo "</details><br>" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ **Source Distribution (.tar.gz)**: Skipped due to previous step failure" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  scan-credentials:
+    name: Scan for Hardcoded Secrets
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+          path: dist/
+
+      - name: Run TruffleHog Scan
+        id: run-trufflehog
+        run: |
+          docker run --rm -v "${{ github.workspace }}:/pwd" trufflesecurity/trufflehog:latest filesystem /pwd/dist/ --archive-max-depth=2 --fail 2>&1 | tee trufflehog.log
+          echo "✅ **TruffleHog**: No verified secrets found in artifacts." >> $GITHUB_STEP_SUMMARY
+
+      - name: Run GitLeaks Scan
+        id: run-gitleaks
+        run: |
+          docker run --rm -v "${{ github.workspace }}:/path" ghcr.io/gitleaks/gitleaks:latest dir /path/dist/ -c /path/.gitleaks.toml --max-archive-depth=2 --exit-code=1 2>&1 | tee gitleaks.log
+          echo "✅ **GitLeaks**: No hardcoded secrets found in artifacts." >> $GITHUB_STEP_SUMMARY
+
+      - name: Report Scan Results
+        if: always()
+        run: |
+          echo "## 🛡️ Credential Scan Status Report" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ steps.run-trufflehog.outcome }}" == "success" ]; then
+            echo "✅ **TruffleHog**: Scan passed, no secrets found" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ steps.run-trufflehog.outcome }}" == "failure" ]; then
+            echo "🚨 **TruffleHog**: Active secrets detected!" >> $GITHUB_STEP_SUMMARY
+            echo "<details><summary>Click to expand scan report</summary>" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`text" >> $GITHUB_STEP_SUMMARY
+            cat trufflehog.log >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            echo "</details><br>" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ **TruffleHog**: Skipped due to previous step failure" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "${{ steps.run-gitleaks.outcome }}" == "success" ]; then
+            echo "✅ **GitLeaks**: Scan passed, no hardcoded secrets found" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ steps.run-gitleaks.outcome }}" == "failure" ]; then
+            echo "🚨 **GitLeaks**: Hardcoded secrets detected!" >> $GITHUB_STEP_SUMMARY
+            echo "<details><summary>Click to expand scan report</summary>" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`text" >> $GITHUB_STEP_SUMMARY
+            cat gitleaks.log >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            echo "</details><br>" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ **GitLeaks**: Skipped due to previous step failure" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  deploy-test:
+    name: Deploy to Test PyPI
+    needs: [test, scan-credentials]
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      # NOTE: Replace `python-library-20260310` with your actual package name to provide a direct link to the published package on Test PyPI
+      url: https://test.pypi.org/project/python-library-20260310/
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+          path: dist/
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Publish to Test PyPI
+        run: |
+          uv publish --publish-url https://test.pypi.org/legacy/
+          echo "### 🧪 Test PyPI Publish Successful" >> $GITHUB_STEP_SUMMARY
+
+  deploy:
+    name: Deploy to PyPI
+    needs: deploy-test
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      # NOTE: Replace `python-library-20260310` with your actual package name to provide a direct link to the published package on PyPI
+      url: https://pypi.org/project/python-library-20260310/
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+          path: dist/
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Publish to PyPI
+        run: |
+          uv publish
+          echo "### 🚀 PyPI Publish Successful" >> $GITHUB_STEP_SUMMARY

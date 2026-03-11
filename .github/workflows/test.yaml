@@ -2,16 +2,14 @@ name: Test
 
 on:
   push:
+    tags:
+      - '*'
     branches:
       - main
   pull_request:
     branches:
       - main
   merge_group:
-  release:
-    types:
-      - published
-      - prereleased
   workflow_dispatch:
 
 concurrency:
