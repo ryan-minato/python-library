@@ -187,8 +187,8 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: testpypi
-      # NOTE: Replace `python-library-20260310` with your actual package name to provide a direct link to the published package on Test PyPI
-      url: https://test.pypi.org/project/python-library-20260310/
+      # NOTE: Replace `python-helloworld` with your actual package name to provide a direct link to the published package on Test PyPI
+      url: https://test.pypi.org/project/python-helloworld/
     permissions:
       id-token: write
       contents: read
@@ -214,8 +214,8 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: pypi
-      # NOTE: Replace `python-library-20260310` with your actual package name to provide a direct link to the published package on PyPI
-      url: https://pypi.org/project/python-library-20260310/
+      # NOTE: Replace `python-helloworld` with your actual package name to provide a direct link to the published package on PyPI
+      url: https://pypi.org/project/python-helloworld/
     permissions:
       id-token: write
       contents: read

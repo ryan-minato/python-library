@@ -4,10 +4,10 @@ Use this page as a pre-release sweep after creating your repository from the tem
 
 ## Required replacements
 
-- Replace `python-library` with your distribution name.
-- Replace `python_library` with your import package name.
-- Replace `Hello from python-library!` with a real example or remove it.
-- Replace `zenless-lab/python-library` with your repository path.
+- Replace `python-helloworld` with your distribution name.
+- Replace `python_helloworld` with your import package name.
+- Replace `Hello from python-helloworld!` with a real example or remove it.
+- Replace `zenless-lab/python-helloworld` with your repository path.
 
 ## Files that usually need edits
 
@@ -16,7 +16,7 @@ Use this page as a pre-release sweep after creating your repository from the tem
 | `pyproject.toml` | Package metadata, authors, dependencies, and tool config. |
 | `zensical.toml` | Docs title, site URL, repository URL, theme, and navigation settings. |
 | `README.md` | Public landing page for users and contributors. |
-| `src/python_library/__init__.py` | Placeholder implementation and package name. |
+| `src/python_helloworld/__init__.py` | Placeholder implementation and package name. |
 | `tests/test_example.py` | Placeholder test and import path. |
 | `.github/workflows/docs.yml` | Confirm documentation deployment still matches your docs strategy. |
 
@@ -24,7 +24,7 @@ Use this page as a pre-release sweep after creating your repository from the tem
 
 Review these directory or package-level changes:
 
-- Rename `src/python_library/`.
+- Rename `src/python_helloworld/`.
 - Update imports that still point to the old package name.
 - Decide whether `scripts/` is needed.
 - Decide whether `notebooks/` is needed.

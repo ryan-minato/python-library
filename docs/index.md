@@ -7,9 +7,9 @@ This template is designed for developers who want a practical baseline instead o
 The current repository still ships with a deliberately tiny placeholder API so the template is runnable immediately:
 
 ```python
-from python_library import hello
+from python_helloworld import hello
 
-assert hello() == "Hello from python-library!"
+assert hello() == "Hello from python-helloworld!"
 ```
 
 ## What is included?
@@ -44,13 +44,13 @@ Click **Use this template** on GitHub if the default template flow works for you
 Use GitHub's **Import repository** flow if you do not want the generated-from badge. The source URL is:
 
 ```text
-https://github.com/zenless-lab/python-library.git
+https://github.com/zenless-lab/python-helloworld.git
 ```
 
 ### Clone with Git
 
 ```bash
-git clone https://github.com/zenless-lab/python-library.git your-library
+git clone https://github.com/zenless-lab/python-helloworld.git your-library
 cd your-library
 ```
 
