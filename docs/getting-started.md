@@ -19,7 +19,7 @@ If you do not want the generated-from marker:
 1. Paste the source URL below into **The URL for your source repository**.
 
 ```text
-https://github.com/zenless-lab/python-library.git
+https://github.com/zenless-lab/python-helloworld.git
 ```
 
 1. Choose the destination owner and repository name.
@@ -28,7 +28,7 @@ https://github.com/zenless-lab/python-library.git
 ## Option 3: Clone locally
 
 ```bash
-git clone https://github.com/zenless-lab/python-library.git your-library
+git clone https://github.com/zenless-lab/python-helloworld.git your-library
 cd your-library
 ```
 

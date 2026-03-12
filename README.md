@@ -59,7 +59,7 @@ Use this when you want a new repository without the generated-from-template badg
 4. Start the import.
 
 ```text
-https://github.com/zenless-lab/python-library.git
+https://github.com/zenless-lab/python-helloworld.git
 ```
 
 ### Option 3: Clone and reinitialize locally
@@ -67,7 +67,7 @@ https://github.com/zenless-lab/python-library.git
 Use this when you want full control from the command line.
 
 ```bash
-git clone https://github.com/zenless-lab/python-library.git your-library
+git clone https://github.com/zenless-lab/python-helloworld.git your-library
 cd your-library
 ```
 
@@ -120,10 +120,10 @@ uv run zensical build --clean
 The repository intentionally ships with a tiny public example so the template is executable on day one.
 
 ```python
-from python_library import hello
+from python_helloworld import hello
 
 message = hello()
-assert message == "Hello from python-library!"
+assert message == "Hello from python-helloworld!"
 ```
 
 This implementation is only a smoke-test placeholder. Replace it early with your actual package surface.
@@ -135,11 +135,11 @@ These are the minimum edits to turn the template into a real project.
 | Area | What to update |
 | ---: | :--- |
 | Package metadata | Update `name`, `description`, authors, and Python version support in `pyproject.toml`. |
-| Import package | Rename `src/python_library/` to your actual import name. |
-| Sample implementation | Replace `hello()` in `src/python_library/__init__.py`. |
+| Import package | Rename `src/python_helloworld/` to your actual import name. |
+| Sample implementation | Replace `hello()` in `src/python_helloworld/__init__.py`. |
 | Tests | Replace the placeholder assertion in `tests/test_example.py`. |
 | Documentation metadata | Update `site_name`, `site_description`, `site_author`, `site_url`, `repo_name`, and `repo_url` in `zensical.toml`. |
-| Repository references | Replace `python-library`, `python_library`, and `zenless-lab/python-library` across the project. |
+| Repository references | Replace `python-helloworld`, `python_helloworld`, and `zenless-lab/python-helloworld` across the project. |
 | Optional directories | Remove `scripts/` or `notebooks/` if they do not fit your project. |
 
 ## Recommended Customization Order
@@ -172,7 +172,7 @@ uv run zensical build --clean
 ├── notebooks/               # Optional notebooks
 ├── scripts/                 # Optional utility scripts
 ├── src/
-│   └── python_library/      # Rename this package for your project
+│   └── python_helloworld/   # Rename this package for your project
 ├── tests/                   # Test suite
 ├── pyproject.toml           # Packaging and tool configuration
 └── zensical.toml            # Documentation configuration
@@ -192,7 +192,7 @@ If you want a practical starting sequence after creating your own repository, us
 ```text
 create repository
 -> uv sync
--> rename src/python_library
+-> rename src/python_helloworld
 -> update pyproject.toml
 -> replace hello()
 -> replace tests

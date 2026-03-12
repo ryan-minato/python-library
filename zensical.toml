@@ -15,7 +15,7 @@ site_author = "zenless-lab"
 
 # Canonical URL for the published site.
 # FIXME: Change site_url to https://<username>.github.io/<project_slug>/ when using this template.
-site_url = "https://zenless-lab.github.io/python-library/"
+site_url = "https://zenless-lab.github.io/python-helloworld/"
 
 # Footer copyright notice. HTML is allowed.
 # FIXME: Change copyright to your <username> when using this template.
@@ -24,9 +24,9 @@ Copyright &copy; 2026 zenless-lab.
 """
 
 # FIXME: Change repo_name to <username>/<project_slug> when using this template.
-repo_name = "zenless-lab/python-library"
+repo_name = "zenless-lab/python-helloworld"
 # FIXME: Change repo_url to https://github.com/<username>/<project_slug> when using this template.
-repo_url = "https://github.com/zenless-lab/python-library"
+repo_url = "https://github.com/zenless-lab/python-helloworld"
 
 # Optional explicit navigation. If omitted, navigation is inferred from docs/.
 # nav = [

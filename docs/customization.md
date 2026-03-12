@@ -18,7 +18,7 @@ These values affect packaging, installation metadata, and the generated project 
 Rename the module directory:
 
 ```text
-src/python_library/
+src/python_helloworld/
 ```
 
 to your real import name, for example:
