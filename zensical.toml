@@ -1,3 +1,5 @@
+site_name = "Python HelloWorld Template"
+site_description = "Documentation for the Python HelloWorld Template project."
 [project]
 
 # TODO: Fill in the following fields before publishing the site.
