@@ -1,82 +1,70 @@
 # Getting Started
 
-This page covers the three main ways to start from this template and the first commands to run after you create your own repository.
+This page covers the intended setup flow for creating a new project from the template.
 
-## Option 1: Use GitHub's template flow
+## Choose a Creation Method
 
-1. Open the repository on GitHub.
-2. Click **Use this template**.
-3. Create a new repository from it.
+Use one of these three approaches:
 
-This is the fastest path, but GitHub may label the new repository as generated from the template.
+1. Use GitHub's **Use this template** button.
+2. Use GitHub's import-repository flow with `https://github.com/zenless-lab/python-helloworld.git` if you do not want the generated-from marker.
+3. Clone the repository, remove `.git/`, and initialize a new Git repository yourself.
 
-## Option 2: Import the repository without the generated badge
+## Reinitialize the Project
 
-If you do not want the generated-from marker:
+After the new repository exists, remove the template package and project metadata so `uv` can generate the project shape you actually want:
 
-1. Click the **+** menu in the top-right area of GitHub.
-1. Choose **Import repository**.
-1. Paste the source URL below into **The URL for your source repository**.
-
-```text
-https://github.com/zenless-lab/python-helloworld.git
+``` bash
+rm -rf src uv.lock pyproject.toml
+uv init --lib
 ```
 
-1. Choose the destination owner and repository name.
-1. Run the import.
+Replace `--lib` with `--package` or `--app` if that better matches your target.
 
-## Option 3: Clone locally
+## Restore the Template Tooling
+
+Install the development dependencies that this template expects:
+
+``` bash
+uv add --dev pre-commit pytest pytest-cov pytest-mock ruff ty zensical
+```
+
+Then append the template configuration and remove the template file:
 
 ```bash
-git clone https://github.com/zenless-lab/python-helloworld.git your-library
-cd your-library
+cat pyproject.template.toml >> pyproject.toml
+rm pyproject.template.toml
 ```
 
-If you want a clean Git history:
+## Install Dependencies and Hooks
 
-```bash
-rm -rf .git
-git init
-git add .
-git commit -m "Initial commit"
-```
-
-## First commands to run
-
-Install dependencies and verify that the template works before changing anything.
+Once the project metadata is in place, install the environment and Git hooks:
 
 ```bash
 uv sync
-uv run pytest
-uv run ruff check .
-uv run ty check
-uv run zensical build --clean
+uv run pre-commit install
 ```
 
-If you want a live preview while editing docs, run:
+These steps align the local environment with the repository configuration and enable automated checks before commits.
+
+## Replace Placeholder Content
+
+This repository intentionally keeps the example implementation very small. Before starting real work, review and replace:
+
+- `src/` with your real package or app modules
+- `tests/` with tests that match the new behavior
+- `docs/` with project-specific documentation
+- `zensical.toml` with your actual documentation site metadata
+
+## Recommended First Checks
+
+After setup, run the standard local checks once:
 
 ```bash
-uv run zensical serve
+uv run ruff format
+uv run ruff check --fix
+uv run ty
+uv run pytest
 ```
 
-## What to update first
-
-Start with the parts that define public identity and import paths.
-
-1. Rename the package directory under `src/`.
-2. Update the `project` metadata in `pyproject.toml`.
-3. Replace the sample code and tests.
-4. Update the docs metadata in `zensical.toml`.
-5. Rewrite the README for your real library.
-
-## Suggested sequence
-
-```text
-Create repository
--> sync dependencies
--> rename package
--> update metadata
--> replace sample code
--> update zensical.toml and docs/
--> confirm CI workflows still match your release process
-```
+If these commands pass, the template has been reinitialized correctly for normal development.

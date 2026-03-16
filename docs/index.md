@@ -1,87 +1,45 @@
-# Python Library Template
+# Python HelloWorld Template
 
-> Start with a clean Python library scaffold, then replace the template pieces before your first release.
+This documentation set explains how the template is structured, how to reuse it safely, and what conventions are already encoded in the repository.
 
-This template is designed for developers who want a practical baseline instead of an empty repository. It gives you a modern Python project layout with packaging, tests, linting, type checking, and documentation already wired together.
+## Documentation Map
 
-The current repository still ships with a deliberately tiny placeholder API so the template is runnable immediately:
+- [Getting Started](getting-started.md)
+- [Repository Structure](repository-structure.md)
+- [Development Workflow](development-workflow.md)
 
-```python
-from python_helloworld import hello
+## What This Template Optimizes For
 
-assert hello() == "Hello from python-helloworld!"
-```
+This repository is intentionally opinionated. It favors:
 
-## What is included?
+- Fast local setup with `uv`
+- A single, consistent formatting and linting path with `ruff`
+- A dedicated type-checking step with `ty`
+- A familiar and flexible testing stack based on `pytest`
+- Documentation that can be versioned and published through `zensical`
+- Repository metadata that helps AI coding agents operate with better context
 
-### Project foundations
+## Current Repository Components
 
-- `src/` package layout
-- `pyproject.toml` with build metadata
-- `uv` dependency management
+The current repository includes these top-level areas:
 
-### Quality tooling
+- `.agents/` for agent-related resources
+- `.github/workflows/` for CI automation
+- `docs/` for the documentation source
+- `notebooks/` as a notebook workspace placeholder
+- `scripts/` for utility scripts
+- `site/` for generated documentation output
+- `src/python_helloworld/` for the example Python package
+- `tests/` for the pytest suite
 
-- `pytest` for tests
-- `ruff` for linting and formatting
-- `ty` for static type checking
-- `pre-commit` support
+Configuration files such as `.gitleaks.toml`, `.pre-commit-config.yaml`, `pyproject.toml`, `pyproject.template.toml`, `uv.lock`, and `zensical.toml` complete the development and publishing setup.
 
-### Documentation and automation
+## Why the Template Works This Way
 
-- Zensical documentation setup via `zensical.toml`
-- GitHub Actions–ready structure (add your own docs deployment workflow)
-- A docs structure you can expand instead of rebuilding later
+The template is optimized for the first hour of a new project. It gives you enough structure to start immediately, while keeping the example code deliberately small so it can be replaced quickly after project creation.
 
-## Choose your starting path
+It is also built for AI-assisted programming. The goal is not to automate thought, but to reduce ambiguity. The clearer the repository structure and conventions are, the more reliably a coding agent can make correct changes.
 
-### Use GitHub template
+## Next Step
 
-Click **Use this template** on GitHub if the default template flow works for you.
-
-### Import the repository
-
-Use GitHub's **Import repository** flow if you do not want the generated-from badge. The source URL is:
-
-```text
-https://github.com/zenless-lab/python-helloworld.git
-```
-
-### Clone with Git
-
-```bash
-git clone https://github.com/zenless-lab/python-helloworld.git your-library
-cd your-library
-```
-
-## Quick setup
-
-```bash
-uv sync
-uv run pytest
-uv run ruff check .
-uv run ty check
-uv run zensical serve
-```
-
-To generate the static site output into `site/`:
-
-```bash
-uv run zensical build --clean
-```
-
-## Before you ship anything
-
-You should update at least these parts:
-
-- package metadata in `pyproject.toml`
-- the module directory under `src/`
-- the example implementation and tests
-- documentation metadata and repository links in `zensical.toml`
-- README title, install instructions, and examples
-
-## Read next
-
-- Go to the **Getting Started** page for setup options.
-- Use the **Customization Guide** when adapting the template.
-- Use the **Rename Checklist** before publishing the first version.
+Start with [Getting Started](getting-started.md) if you are creating a new repository from this template.
