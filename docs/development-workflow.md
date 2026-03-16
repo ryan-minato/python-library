@@ -32,7 +32,7 @@ uv run ruff check --fix
 Run type checks with:
 
 ```bash
-uv run ty
+uv run ty check
 ```
 
 The template is configured to check `src/` and `tests/`, while excluding `scripts/` and `notebooks/` by default.

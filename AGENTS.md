@@ -19,7 +19,7 @@
 - Install local hooks with `uv run pre-commit install`.
 - Format Python code with `uv run ruff format`.
 - Run lint fixes with `uv run ruff check --fix`.
-- Run type checks with `uv run ty` locally. CI uses `uv run ty check --output-format=github`.
+- Run type checks with `uv run ty check` locally. CI uses `uv run ty check --output-format=github`.
 - Run tests with `uv run pytest`.
 - Build distributions with `uv build`.
 - Build documentation with `zensical build --clean`.
@@ -44,7 +44,7 @@
 
 ## Testing And Validation
 
-- For Python code changes, run `uv run ruff format`, `uv run ruff check --fix`, `uv run ty`, and `uv run pytest` when the affected area warrants it.
+- For Python code changes, run `uv run ruff format`, `uv run ruff check --fix`, `uv run ty check`, and `uv run pytest` when the affected area warrants it.
 - If packaging behavior changes, also run `uv build`.
 - If documentation sources or `zensical.toml` change, rebuild docs with `zensical build --clean` instead of editing generated files.
 - Pre-commit also runs trailing whitespace fixes, YAML validation, merge-conflict checks, lockfile export checks, and gitleaks scanning.

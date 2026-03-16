@@ -63,7 +63,7 @@ After setup, run the standard local checks once:
 ```bash
 uv run ruff format
 uv run ruff check --fix
-uv run ty
+uv run ty check
 uv run pytest
 ```
 

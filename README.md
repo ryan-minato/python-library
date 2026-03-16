@@ -59,7 +59,7 @@ uv run pre-commit install
 
 - **Dependency and environment management:** `uv`
 - **Formatter and linter:** `uv run ruff format` and `uv run ruff check --fix`
-- **Type checking:** `uv run ty`
+- **Type checking:** `uv run ty check`
 - **Tests:** `uv run pytest`
 - **Documentation site generation:** `zensical`
 - **Git hooks:** `uv run pre-commit install`
