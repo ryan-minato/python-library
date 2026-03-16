@@ -44,11 +44,12 @@ exclude = [
 
 [tool.ruff]
 line-length = 120
-# Example: Ignore gRPC generated files
-# extend-exclude = [
-#     "*_pb2.py",
-#     "*_pb2_grpc.py",
-# ]
+extend-exclude = [
+    ".agents",
+    # Example: Ignore gRPC generated files
+    # "*_pb2.py",
+    # "*_pb2_grpc.py",
+]
 
 [tool.ruff.format]
 docstring-code-format = true
