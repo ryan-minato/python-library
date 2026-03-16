@@ -1,203 +1,124 @@
+<!-- markdownlint-disable MD041 -->
+<!-- markdownlint-disable MD033 -->
 <div align="center">
 
-# 📦 Python Library Template
+<h1>Python HelloWorld Template</h1>
 
-**A modern, opinionated foundation for high-performance Python packages.**
+<strong>A modern Python starter for libraries, packages, and small applications</strong>
 
-[![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white&style=flat-square)](https://www.python.org/)
-[![Package manager](https://img.shields.io/badge/package%20manager-uv-DE5FE9?style=flat-square)](https://docs.astral.sh/uv/)
-[![Lint](https://img.shields.io/badge/lint-ruff-D7FF64?logo=ruff&logoColor=111111&style=flat-square)](https://docs.astral.sh/ruff/)
-[![Tests](https://img.shields.io/badge/tests-pytest-0A9EDC?logo=pytest&logoColor=white&style=flat-square)](https://docs.pytest.org/)
-<br />
-[![Types](https://img.shields.io/badge/types-ty-1F6FEB?style=flat-square)](https://github.com/astral-sh/ty)
-[![Docs](https://img.shields.io/badge/docs-zensical-16A085?style=flat-square)](https://pypi.org/project/zensical/)
-[![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-FE602F?logo=pre-commit&logoColor=white&style=flat-square)](https://pre-commit.com/)
-[![Package layout](https://img.shields.io/badge/layout-src-0F172A?style=flat-square)](#project-layout)
+Fast setup, opinionated tooling, documentation, CI workflows, and AI-assisted development out of the box.
 
----
-
-[Overview](#-overview) • [Features](#-features) • [Start From This Repository](#start-from-this-repository)
+[Quick Nav](#quick-nav) · [Why This Template](#why-this-template) · [Quick Start](#quick-start) · [Tooling](#what-is-included) · [Structure](#repository-layout) · [Full Docs](docs/index.md)
 
 </div>
+<!-- markdownlint-enable MD033 -->
 
-## 🚀 Overview
+## Quick Nav
 
-Stop wasting time on boilerplate. **Python Library Template** provides a clean, pre-configured starting point using the latest industry-standard tooling. Focus on writing your code while we handle the ecosystem.
+- [Why This Template](#why-this-template)
+- [Quick Start](#quick-start)
+- [What Is Included](#what-is-included)
+- [Repository Layout](#repository-layout)
+- [AI-Assisted Development](#ai-assisted-development)
+- [CI, Docs, and Security](#ci-docs-and-security)
 
-> [!TIP]
-> This template is optimized for small-to-medium libraries requiring high reliability and developer velocity.
+## Why This Template
 
-## ✨ Features
+This repository is a reusable Python project template built for fast project bootstrap without sacrificing engineering discipline. It combines a minimal codebase with an opinionated development workflow: fast dependency management through `uv`, linting and formatting with `ruff`, type checking with `ty`, testing with `pytest`, documentation with `zensical`, and CI workflows for quality, tests, docs, publishing, and secret scanning.
 
-| Category | Tool | Description |
-| :---: | :---: | :--- |
-| **Workflow** | [**uv**](https://docs.astral.sh/uv/) | Blazing fast Python package and project manager. |
-| **Quality** | [**ruff**](https://docs.astral.sh/ruff/) | An extremely fast Python linter and code formatter. |
-| **Automation** | [**pre-commit**](https://pre-commit.com/) | Managing and maintaining multi-language pre-commit hooks. |
-| **Testing** | [**pytest**](https://docs.pytest.org/) | Simple and powerful testing framework. |
-| **Typing** | [**ty**](https://github.com/astral-sh/ty) | Modern type-checking utilities. |
-| **Docs** | [**zensical**](https://pypi.org/project/zensical/) | Minimalist, documentation-driven development. |
-| **Structure** | [**src layout**](https://packaging.python.org/en/latest/discussions/src-layout-vs-flat-layout/) | Prevents common import issues and ensures clean packaging. |
+It is also designed for AI-assisted development from the start. The repository already contains agent-oriented structure under `.agents/`, and this project now includes an `AGENTS.md` file so coding agents can work with accurate repository context and conventions.
 
-## Start From This Repository
+## Quick Start
 
-Choose the workflow that matches how you want to adopt the template.
+There are three practical ways to create a new project from this template:
 
-### Option 1: Use GitHub's template flow
+1. Use GitHub's **Use this template** button.
+2. Use GitHub's repository import flow with `https://github.com/zenless-lab/python-helloworld.git` if you want to avoid the generated-from badge.
+3. Clone the repository locally, remove `.git`, and initialize a fresh Git history.
 
-1. Open this repository on GitHub.
-2. Click **Use this template**.
-3. Create a new repository from it.
-
-### Option 2: Import the repository
-
-Use this when you want a new repository without the generated-from-template badge.
-
-1. Open GitHub's **Import repository** page.
-2. Paste the source URL below.
-3. Choose the new owner, name, and visibility.
-4. Start the import.
-
-```text
-https://github.com/zenless-lab/python-helloworld.git
-```
-
-### Option 3: Clone and reinitialize locally
-
-Use this when you want full control from the command line.
+After creating the new repository, reinitialize it for your actual project type:
 
 ```bash
-git clone https://github.com/zenless-lab/python-helloworld.git your-library
-cd your-library
+rm -rf src uv.lock pyproject.toml
+uv init --lib
+uv add --dev pre-commit pytest pytest-cov pytest-mock ruff ty zensical
+cat pyproject.template.toml >> pyproject.toml
+rm pyproject.template.toml
 ```
 
-If you want a fresh Git history:
+Then review and replace the placeholder content in `tests/` and `docs/`.
 
-```bash
-rm -rf .git
-git init
-git add .
-git commit -m "Initial commit"
-```
-
-## Updating dev dependencies
-
-If you want to remove items from the `dev-dependencies` section in `pyproject.toml`, delete the corresponding entries under the `[dependency-groups]` table (for example `[dependency-groups.dev]`). After removing unwanted entries, re-run the following to add or update the minimal development dependencies:
-
-```bash
-uv add --dev zensical pre-commit ruff ty pytest pytest-cov pytest-mock
-```
-
-This command will add or update the listed development packages and record minimal version constraints where applicable.
-
-## First 5 Minutes
-
-Install the environment, confirm the template works, then start replacing the placeholders.
+To set up the development environment in this repository layout:
 
 ```bash
 uv sync
-uv run pytest
-uv run ruff check .
-uv run ruff format .
-uv run ty check
 uv run pre-commit install
 ```
 
-To preview the documentation site locally:
+## What Is Included
 
-```bash
-uv run zensical serve
-```
+- **Dependency and environment management:** `uv`
+- **Formatter and linter:** `uv run ruff format` and `uv run ruff check --fix`
+- **Type checking:** `uv run ty`
+- **Tests:** `uv run pytest`
+- **Documentation site generation:** `zensical`
+- **Git hooks:** `uv run pre-commit install`
 
-To build the static documentation output:
+Why these choices:
 
-```bash
-uv run zensical build --clean
-```
+- `uv` keeps setup and dependency operations fast.
+- `ruff` replaces several older tools with one consistent workflow.
+- `ty` adds a dedicated type-checking pass without bloating the stack.
+- `pytest` remains the most flexible and widely understood testing framework in Python.
+- `zensical` gives the template a documentation pipeline with a modern output site.
 
-## Current Placeholder API
+## Repository Layout
 
-The repository intentionally ships with a tiny public example so the template is executable on day one.
-
-```python
-from python_helloworld import hello
-
-message = hello()
-assert message == "Hello from python-helloworld!"
-```
-
-This implementation is only a smoke-test placeholder. Replace it early with your actual package surface.
-
-## What To Rename Before Shipping
-
-These are the minimum edits to turn the template into a real project.
-
-| Area | What to update |
-| ---: | :--- |
-| Package metadata | Update `name`, `description`, authors, and Python version support in `pyproject.toml`. |
-| Import package | Rename `src/python_helloworld/` to your actual import name. |
-| Sample implementation | Replace `hello()` in `src/python_helloworld/__init__.py`. |
-| Tests | Replace the placeholder assertion in `tests/test_example.py`. |
-| Documentation metadata | Update `site_name`, `site_description`, `site_author`, `site_url`, `repo_name`, and `repo_url` in `zensical.toml`. |
-| Repository references | Replace `python-helloworld`, `python_helloworld`, and `zenless-lab/python-helloworld` across the project. |
-| Optional directories | Remove `scripts/` or `notebooks/` if they do not fit your project. |
-
-## Recommended Customization Order
-
-1. Rename the package directory in `src/`.
-2. Update project metadata in `pyproject.toml`.
-3. Replace the placeholder code and tests.
-4. Update the documentation metadata in `zensical.toml`.
-5. Rewrite the docs in `docs/` to match your API.
-6. Rewrite this README for your real library once the public interface is stable.
-
-## Everyday Commands
-
-```bash
-uv sync
-uv run pytest
-uv run ruff check .
-uv run ruff format .
-uv run ty check
-uv run pre-commit run --all-files
-uv run zensical serve
-uv run zensical build --clean
-```
-
-## Project Layout
+The following structure is based on the current repository contents, not a hypothetical layout:
 
 ```text
 .
-├── docs/                    # Documentation source files
-├── notebooks/               # Optional notebooks
-├── scripts/                 # Optional utility scripts
-├── src/
-│   └── python_helloworld/   # Rename this package for your project
-├── tests/                   # Test suite
-├── pyproject.toml           # Packaging and tool configuration
-└── zensical.toml            # Documentation configuration
+├── .agents/                 # Agent-specific resources and skill placeholders
+├── .devcontainer/           # Dev container configuration
+├── .github/workflows/       # CI workflows for docs, publish, quality, secrets, and tests
+├── docs/                    # Documentation source files for the site
+├── notebooks/               # Notebook workspace placeholder
+├── scripts/                 # Project scripts
+├── site/                    # Generated documentation output
+├── src/python_helloworld/   # Template Python package
+├── tests/                   # Pytest-based tests
+├── .gitleaks.toml           # Secret and PII scanning rules
+├── .pre-commit-config.yaml  # Local quality and safety hooks
+├── pyproject.toml           # Active project configuration
+├── pyproject.template.toml  # Template config to append after `uv init`
+├── requirements.txt         # Exported requirements snapshot
+├── uv.lock                  # Locked dependency resolution
+└── zensical.toml            # Documentation site configuration
 ```
 
-## Template Notes
+## AI-Assisted Development
 
-- Documentation is configured through `zensical.toml`, not `mkdocs.yml`.
-- The generated site output lives in `site/`.
-- The template currently has no runtime dependencies in `pyproject.toml`.
-- The sample package exports a single function, `hello()`.
+This template is intentionally structured for AI-assisted programming. The repository includes `.agents/` scaffolding and now ships with an `AGENTS.md` guide that explains the repository at a useful level for coding agents.
 
-## A Good First Pass
+Agents may update `AGENTS.md` when they make structural changes, but that should not be treated as self-maintaining truth. When the repository changes in meaningful ways, review and update `AGENTS.md` so it continues to match reality. That extra maintenance step materially improves agent output quality, especially with lighter models.
 
-If you want a practical starting sequence after creating your own repository, use this:
+## CI, Docs, and Security
 
-```text
-create repository
--> uv sync
--> rename src/python_helloworld
--> update pyproject.toml
--> replace hello()
--> replace tests
--> update zensical.toml
--> rewrite docs/
-```
+The workflow set in `.github/workflows/` currently covers:
 
-The documentation under `docs/` expands on setup and customization if you want a slower, guided pass through the template.
+- `quality.yaml` for quality gates
+- `test.yaml` for automated testing
+- `docs.yml` for documentation generation
+- `publish.yaml` for publishing workflows
+- `secret-scan.yaml` for secret scanning
+
+The local gitleaks rules are intentionally strict. In addition to generic secret scanning, `.gitleaks.toml` blocks non-anonymous email addresses and public IPs, while allowing GitHub and GitLab noreply addresses. This is meant to reduce the chance of pushing personal information into the repository or downstream package releases. If your project intentionally needs an address that would otherwise be blocked, update the allowlist in `.gitleaks.toml`.
+
+## Read More
+
+Detailed guidance is available in the docs site source:
+
+- [Documentation home](docs/index.md)
+- [Getting started](docs/getting-started.md)
+- [Repository structure](docs/repository-structure.md)
+- [Development workflow](docs/development-workflow.md)

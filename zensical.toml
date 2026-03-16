@@ -29,10 +29,12 @@ repo_name = "zenless-lab/python-helloworld"
 repo_url = "https://github.com/zenless-lab/python-helloworld"
 
 # Optional explicit navigation. If omitted, navigation is inferred from docs/.
-# nav = [
-#   { "Get started" = "index.md" },
-#   { "Markdown in 5min" = "markdown.md" },
-# ]
+nav = [
+    { "Overview" = "index.md" },
+    { "Getting Started" = "getting-started.md" },
+    { "Repository Structure" = "repository-structure.md" },
+    { "Development Workflow" = "development-workflow.md" },
+]
 
 # Additional CSS files, relative to docs/.
 #extra_css = ["stylesheets/extra.css"]
@@ -164,6 +166,3 @@ toggle.name = "Switch to light mode"
 #[[project.extra.social]]
 #icon = "fontawesome/brands/github"
 #link = "https://github.com/user/repo"
-
-[project.markdown_extensions.pymdownx.arithmatex]
-generic = true
